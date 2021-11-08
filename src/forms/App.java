@@ -196,6 +196,7 @@ public class App {
     private JTable AbonoTablealumnos;
     private JPanel AbonoPanelControles;
     private JScrollPane AbonoScrollalumnos;
+    private JLabel VentasLabelFactura;
 
 
     private void createTable(Connection con) {
