@@ -10,14 +10,12 @@ import java.sql.Connection;
 
 public class App {
     sqlqueries mn=new sqlqueries();
-    public App(int AccountType, Connection con) {
-        if (AccountType==1){
-            System.out.println("Cuenta de tipo usuario");
-        }else{
-            System.out.println("Cuenta de tipo Admin");
-        }
+    public App(String AccountType, Connection con) {
+        System.out.println("Tipo de Cuenta: "+AccountType);
         init();
-
+        if(AccountType.equals("Usuario")){
+            AppPestanas.setEnabledAt(3,false);
+        }
         createTable(con);
 
 
@@ -178,9 +176,9 @@ public class App {
                 UsuariosTxtUser.setText(UsuariosTableLista.getValueAt(row,2).toString());
                 UsuariosTxtContra.setText(UsuariosTableLista.getValueAt(row,3).toString());
                 if(UsuariosTableLista.getValueAt(row,4).toString().equals("Administrador")){
-                    UsuariosComboTipo.setSelectedIndex(0);
-                }else{
                     UsuariosComboTipo.setSelectedIndex(1);
+                }else{
+                    UsuariosComboTipo.setSelectedIndex(0);
                 }
 
             }
@@ -217,6 +215,7 @@ public class App {
         UsuariosComboTipo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 UsuariosTableLista.setModel(mn.filterUsuarios(con,dataUsuarios()));
             }
         });
@@ -224,24 +223,61 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mn.deleteUsuarios(con,dataUsuarios());
-                UsuariosTableLista.setModel(mn.showUsuarios(con));
                 limpiar();
+                UsuariosTableLista.setModel(mn.showUsuarios(con));
+
             }
         });
         UsuariosBtnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mn.crearUsuario(con,dataUsuarios());
-                UsuariosTableLista.setModel(mn.showUsuarios(con));
                 limpiar();
+                UsuariosTableLista.setModel(mn.showUsuarios(con));
+
+            }
+        });
+        UsuariosBtnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiar();
+                UsuariosTableLista.setModel(mn.showUsuarios(con));
+            }
+        });
+        AppBtnCerrarSesion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Component button=(Component) e.getSource();
+                SwingUtilities.getWindowAncestor(button).dispose();
+                new Login(con);
+            }
+        });
+        AbonosTxTAbonar.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                //if abonar is not a number, empty string or negative number
+                if(!AbonosTxTAbonar.getText().matches("[0-9]*") || AbonosTxTAbonar.getText().equals("") || Integer.parseInt(AbonosTxTAbonar.getText())<0) {
+                    AbonosTxtSaldoFinal.setText("");
+                    AbonoBtnAbonar.setEnabled(false);
+                }else{
+                    double saldo=Double.parseDouble(AbonosTxtSaldoActual.getText());
+                    double abonar=Double.parseDouble(AbonosTxTAbonar.getText());
+                    double saldoFinal=saldo+abonar;
+                    AbonosTxtSaldoFinal.setText(String.valueOf(saldoFinal));
+                    AbonoBtnAbonar.setEnabled(true);
+                }
+
+
             }
         });
     }
     void init(){
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored){}
         JFrame frame = new JFrame();
+        frame.setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
 
         frame.setTitle("Sistema Cafeteria");
         frame.setContentPane(AppPrincipal);
@@ -249,6 +285,8 @@ public class App {
         frame.pack();
         frame.setSize(1000,600);
         frame.setVisible(true);
+
+
 
     }
 
@@ -355,6 +393,8 @@ public class App {
     private JPanel UsuariosPanelLista;
     private JPanel UsuariosPanelControles;
     private JScrollPane UsuariosScrollLista;
+    private JButton UsuariosBtnCancelar;
+    private JButton AppBtnCerrarSesion;
 
 
     private void createTable(Connection con) {
@@ -398,27 +438,17 @@ public class App {
         return data;
     }
     public String[] dataUsuarios(){
-       if(UsuariosComboTipo.getSelectedItem().equals("Administrador")){
-           String data[]= {
-                   UsuariosTxTcodigo.getText(),
-                   UsuariosTxtNombre.getText(),
-                   UsuariosTxtUser.getText(),
-                   String.valueOf(UsuariosTxtContra.getPassword()),
-                   "1",
-           };
-           return data;
-       }else{
-           String data[]= {
-                   UsuariosTxTcodigo.getText(),
-                   UsuariosTxtNombre.getText(),
-                   UsuariosTxtUser.getText(),
-                   String.valueOf(UsuariosTxtContra.getPassword()),
-                   "2",
-           };
-           return data;
-       }
-
+        String data[]={
+                UsuariosTxTcodigo.getText(),
+                UsuariosTxtUser.getText(),
+                UsuariosTxtNombre.getText(),
+                String.valueOf(UsuariosTxtContra.getPassword()),
+                UsuariosComboTipo.getSelectedItem().toString()
+        };
+        return data;
     }
+
+
     public void limpiar(){
         VentasTxtCodigo.setText("");
         VentasTxtNombre.setText("");
