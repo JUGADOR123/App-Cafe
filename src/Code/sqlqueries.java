@@ -70,11 +70,7 @@ public class sqlqueries {
                 registros[1] = rs.getString("nomcompleto");
                 registros[2] = rs.getString("user");
                 registros[3] = rs.getString("contra");
-                if (rs.getString("type").equals("1")) {
-                    registros[4] = "Usuario";
-                } else {
-                    registros[4] = "Administrador";
-                }
+                registros[4] = rs.getString("type");
                 modelo.addRow(registros);
             }
 
@@ -90,22 +86,19 @@ public class sqlqueries {
         String[] registros = new String[5];
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
-            String sql = "SELECT * FROM usuarios WHERE  `codusuario` LIKE ? AND `nomcompleto` LIKE ? AND `user` LIKE ?";
+            String sql = "SELECT * FROM usuarios WHERE  `codusuario` LIKE ? AND `nomcompleto` LIKE ? AND `user` LIKE ? AND type LIKE ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, "%" + textos[0] + "%");
             pst.setString(2, "%" + textos[1] + "%");
             pst.setString(3, "%" + textos[2] + "%");
+            pst.setString(4, "%" + textos[4] + "%");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 registros[0] = rs.getString("codusuario");
                 registros[1] = rs.getString("nomcompleto");
                 registros[2] = rs.getString("user");
                 registros[3] = rs.getString("contra");
-                if (rs.getString("type").equals("1")) {
-                    registros[4] = "Usuario";
-                } else {
-                    registros[4] = "Administrador";
-                }
+                registros[4] = rs.getString("type");
                 modelo.addRow(registros);
             }
 
@@ -145,13 +138,13 @@ public class sqlqueries {
     public void crearUsuario(Connection con, String[] textos) {
         //add row on the table
         try {
-            String sql = "INSERT INTO usuarios (codusuario,nomcompleto,user,contra,type) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO usuarios (nomcompleto,user,contra,type) VALUES (?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, textos[0]);
-            pst.setString(2, textos[1]);
-            pst.setString(3, textos[2]);
-            pst.setString(4, textos[3]);
-            pst.setString(5, textos[4]);
+
+            pst.setString(1, textos[1]);
+            pst.setString(2, textos[2]);
+            pst.setString(3, textos[3]);
+            pst.setString(4, textos[4]);
             pst.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

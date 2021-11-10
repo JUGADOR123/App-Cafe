@@ -11,6 +11,10 @@ import java.sql.SQLException;
 
 public class Login extends  JFrame{
     public void init(){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored){}
+        setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
 
        setTitle("Login");
         setContentPane(PanelPrincipal);
@@ -36,7 +40,7 @@ public class Login extends  JFrame{
                         Component button=(Component) e.getSource();
                         SwingUtilities.getWindowAncestor(button).dispose();
 
-                        App main=new App(response.getInt(5),con);
+                        App main=new App(response.getString(5),con);
                     }else{
                         JOptionPane.showMessageDialog(null,"Nombre de usuario o Contraseña incorrecto","Error de login",JOptionPane.WARNING_MESSAGE);
                         login_txt_user.setText("");
