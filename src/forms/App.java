@@ -257,7 +257,7 @@ public class App {
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
                 //if abonar is not a number, empty string or negative number
-                if(!AbonosTxTAbonar.getText().matches("[0-9]*") || AbonosTxTAbonar.getText().equals("") || Integer.parseInt(AbonosTxTAbonar.getText())<0) {
+                if(!AbonosTxTAbonar.getText().matches("[0-9]*") || AbonosTxTAbonar.getText().equals("") || Integer.parseInt(AbonosTxTAbonar.getText())<=0) {
                     AbonosTxtSaldoFinal.setText("");
                     AbonoBtnAbonar.setEnabled(false);
                 }else{
@@ -269,6 +269,14 @@ public class App {
                 }
 
 
+            }
+        });
+        AbonoBtnAbonar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mn.abonarSaldo(con,dataAbonos());
+                AbonoTablealumnos.setModel(mn.showAlumnos(con));
+                limpiar();
             }
         });
     }
@@ -425,7 +433,11 @@ public class App {
         String data[]={
                 AbonosTxtCodigo.getText(),
                 AbonosTxtNombre.getText(),
-                AbonosTxtGrado.getText()
+                AbonosTxtGrado.getText(),
+                AbonosTxtSaldoActual.getText(),
+                AbonosTxTAbonar.getText(),
+                AbonosTxtSaldoFinal.getText()
+
         };
         return data;
     }

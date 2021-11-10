@@ -1,10 +1,7 @@
 package Code;
 
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class sqlqueries {
 
@@ -135,6 +132,7 @@ public class sqlqueries {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     public void crearUsuario(Connection con, String[] textos) {
         //add row on the table
         try {
@@ -149,5 +147,31 @@ public class sqlqueries {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    public void abonarSaldo(Connection con, String[] textos) {
+        //create factura
+        try {
+            String sql = "INSERT INTO shortfactura (codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, textos[0]);
+            pst.setString(2, "Abono a saldo");
+            pst.setDate(3, new Date(System.currentTimeMillis()));
+            pst.setString(4, textos[3]);
+            pst.setString(5, textos[4]);
+            pst.setString(6, textos[5]);
+            pst.execute();
+        } catch (Exception e) {
+            System.out.println("Error al crear factura: " + e.getMessage());
+        }
+        try {
+            String sql = "UPDATE estudiantes SET saldo=? where cod=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, textos[5]);
+            pst.setString(2, textos[0]);
+            pst.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error al actualizar saldo: " + e.getMessage());
+        };
     }
 }
