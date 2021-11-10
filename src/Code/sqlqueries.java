@@ -83,12 +83,11 @@ public class sqlqueries {
         String[] registros = new String[5];
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
-            String sql = "SELECT * FROM usuarios WHERE  `codusuario` LIKE ? AND `nomcompleto` LIKE ? AND `user` LIKE ? AND type LIKE ?";
+            String sql = "SELECT * FROM usuarios WHERE  `codusuario` LIKE ? AND `nomcompleto` LIKE ? AND `user` LIKE ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, "%" + textos[0] + "%");
             pst.setString(2, "%" + textos[1] + "%");
             pst.setString(3, "%" + textos[2] + "%");
-            pst.setString(4, "%" + textos[4] + "%");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 registros[0] = rs.getString("codusuario");
@@ -172,6 +171,63 @@ public class sqlqueries {
             pst.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error al actualizar saldo: " + e.getMessage());
-        };
+        }
     }
+
+    public DefaultTableModel mostrarFacturasShort(Connection con, String codigo) {
+        //select facturas where codalumno=?
+        String[] titulos = {"Codigo", "Fecha", "Accion", "Balance Inicial", "Total", "Balance Final"};
+        String[] registros = new String[6];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+        try {
+
+            String sql = "SELECT * FROM shortfactura WHERE codalumno=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, codigo);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                registros[0] = rs.getString("nofactura");
+                registros[1] = rs.getString("date");
+                registros[2] = rs.getString("accion");
+                registros[3] = rs.getString("saldoinicial");
+                registros[4] = rs.getString("cobro");
+                registros[5] = rs.getString("saldofinal");
+                modelo.addRow(registros);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return modelo;
+    }
+
+    public DefaultTableModel filterFacturaShort(Connection con, String codigo, String date) {
+        //select facturas where codalumno=? and date=?
+        String[] titulos = {"Codigo", "Fecha", "Accion", "Balance Inicial", "Total", "Balance Final"};
+        String[] registros = new String[6];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+        try {
+
+            String sql = "SELECT * FROM shortfactura WHERE codalumno=? and date=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, codigo);
+            pst.setString(2, date);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                registros[0] = rs.getString("nofactura");
+                registros[1] = rs.getString("date");
+                registros[2] = rs.getString("accion");
+                registros[3] = rs.getString("saldoinicial");
+                registros[4] = rs.getString("cobro");
+                registros[5] = rs.getString("saldofinal");
+                modelo.addRow(registros);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return modelo;
+    }
+
+
 }
