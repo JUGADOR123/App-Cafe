@@ -39,7 +39,7 @@ public class Login extends JFrame {
 
                         App main = new App(response.getString(5), con);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Nombre de usuario o Contraseña incorrecto", "Error de login", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(PanelPrincipal, "Nombre de usuario o Contraseña incorrecto", "Error de login", JOptionPane.WARNING_MESSAGE);
                         login_txt_user.setText("");
                         login_txt_pass.setText("");
                     }
@@ -59,6 +59,7 @@ public class Login extends JFrame {
     }
 
     public void init() {
+        setUndecorated(true);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
@@ -68,8 +69,12 @@ public class Login extends JFrame {
         setTitle("Login");
         setContentPane(PanelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setResizable(false);
         pack();
+        setLocationRelativeTo(null);
+        setAlwaysOnTop(true);
         setVisible(true);
+
     }
 }

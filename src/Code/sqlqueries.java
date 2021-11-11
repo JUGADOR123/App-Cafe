@@ -228,6 +228,65 @@ public class sqlqueries {
         }
         return modelo;
     }
+    public DefaultTableModel showProductos(Connection con){
+        String[] titulos={"Codigo","Producto","Precio","Categoria"};
+        String[] registros=new String[4];
+        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+        try {
+            String sql="SELECT * FROM productos";
+            PreparedStatement pst=con.prepareStatement(sql);
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                registros[0]=rs.getString("codigo");
+                registros[1]=rs.getString("producto");
+                registros[2]=("$"+rs.getString("precio"));
+                registros[3]=rs.getString("categoria");
+                modelo.addRow(registros);
+            }
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        return modelo;
+    }
+    public DefaultTableModel filterProductos(Connection con,String[] textos){
+        String[] titulos={"Codigo","Producto","Precio","Categoria"};
+        String[] registros=new String[4];
+        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+        try {
+            String sql="SELECT * FROM productos WHERE codigo LIKE ? AND  producto LIKE ? AND categoria LIKE ?";
+            PreparedStatement pst=con.prepareStatement(sql);
+            pst.setString(1,"%"+ textos[0]+"%");
+            pst.setString(2,"%"+ textos[1]+"%");
+            pst.setString(3, "%"+textos[3]+"%");
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                registros[0]=rs.getString("codigo");
+                registros[1]=rs.getString("producto");
+                registros[2]=("$"+rs.getString("precio"));
+                registros[3]=rs.getString("categoria");
+                modelo.addRow(registros);
+            }
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        return modelo;
+    }
+    public DefaultTableModel createProductos(Connection con,String[] textos){
+        String[] titulos={"Codigo","Producto","Precio","Categoria"};
+        String[] registros=new String[4];
+        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+        try {
+            String sql="INSERT INTO productos (producto,precio,categoria) VALUES (?,?,?)";
+            PreparedStatement pst=con.prepareStatement(sql);
+            pst.setString(1, textos[1]);
+            pst.setString(2, textos[2]);
+            pst.setString(3, textos[3]);
+            pst.executeUpdate();
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        return modelo;
+    }
 
 
 }

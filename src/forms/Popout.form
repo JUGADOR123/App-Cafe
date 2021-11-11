@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="forms.Popout">
+  <grid id="27dc6" binding="PopoutPrincipal" layout-manager="BorderLayout" hgap="5" vgap="5">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-8750470"/>
+    </properties>
+    <border type="line">
+      <color color="-65536"/>
+    </border>
+    <children>
+      <grid id="2432f" binding="PopoutTopBar" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties>
+          <background color="-14124834"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="56620" class="javax.swing.JLabel" binding="PopoutLogo">
+            <constraints border-constraint="West"/>
+            <properties>
+              <icon value="imagenes/logo_colegio_64x64.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="91b4f" class="javax.swing.JLabel" binding="PopoutCategoria">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <font name="Comic Sans MS" size="24"/>
+              <foreground color="-1"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <text value="PLACEHOLDER"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="1cdae" binding="PopoutPanelPrincipal" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="Center"/>
+        <properties>
+          <background color="-8750470"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <scrollpane id="fceb5" binding="PopoutScroll">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-8750470"/>
+              <foreground color="-8750470"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="674ed" class="javax.swing.JTable" binding="PopoutProductos">
+                <constraints/>
+                <properties>
+                  <background color="-8750470"/>
+                  <foreground color="-1"/>
+                  <gridColor color="-16777216"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </grid>
+      <grid id="dc8dd" binding="PopoutPanelControles" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="South"/>
+        <properties>
+          <background color="-8750470"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="6b088" class="javax.swing.JButton" binding="PopoutBtnCancelar">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Cancelar"/>
+            </properties>
+          </component>
+          <component id="8595a" class="javax.swing.JButton" binding="PopoutBtnAceptar">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Aceptar"/>
+            </properties>
+          </component>
+          <component id="1943b" class="javax.swing.JLabel" binding="PopoutLabelCantidad">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Cantidad"/>
+            </properties>
+          </component>
+          <component id="ca0c9" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

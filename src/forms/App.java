@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 
-public class App {
+public class App extends JFrame{
     sqlqueries mn = new sqlqueries();
     private JPanel AppPrincipal;
     private JPanel AppTopBar;
@@ -119,12 +119,34 @@ public class App {
     private JTextField HistorialTxTYear;
     private JComboBox HistorialComboMes;
     private JComboBox HistorialComboDia;
+    private JPanel AppPanelProductos;
+    private JTable ProductosTable;
+    private JTextField ProductosTxTCodigo;
+    private JTextField ProductosTxtNombre;
+    private JTextField ProductosTxtPrecio;
+    private JComboBox ProductosComboCategoria;
+    private JPanel ProductosPanelDatos;
+    private JLabel ProductosLabelCodigo;
+    private JLabel ProductosLabelNombre;
+    private JLabel ProductosLabelPrecio;
+    private JLabel ProductosLabelTipo;
+    private JPanel ProductosPanelTable;
+    private JPanel ProductosPanelControles;
+    private JScrollPane ProductosScroll;
+    private JButton ProductosBtnGuardar;
+    private JButton ProductosBtnEditar;
+    private JButton ProductosBtnBorrar;
+    private JButton ProductosBtnCancelar;
+    private Connection conn;
+
 
     public App(String AccountType, Connection con) {
+        conn=con;
         System.out.println("Tipo de Cuenta: " + AccountType);
         init();
         if (AccountType.equals("Usuario")) {
             AppPestanas.setEnabledAt(3, false);
+            AppPestanas.setEnabledAt(4, false);
         }
         createTable(con);
 
@@ -171,14 +193,13 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limpiar();
-                VentasAlumnosTable.setModel(mn.showAlumnos(con));
+
             }
         });
         VentasBtnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limpiar();
-                VentasAlumnosTable.setModel(mn.showAlumnos(con));
                 VentasFacturaActualTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Cantidad", "Total"}));
 
             }
@@ -225,7 +246,6 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limpiar();
-                AbonoTablealumnos.setModel(mn.showAlumnos(con));
 
             }
         });
@@ -365,8 +385,8 @@ public class App {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                //if abonar is not a number, empty string or negative number
-                if (!AbonosTxTAbonar.getText().matches("[0-9]*") || AbonosTxTAbonar.getText().equals("") || Integer.parseInt(AbonosTxTAbonar.getText()) <= 0) {
+                //if abonar is not a decimal number, empty string or negative number
+                if (!AbonosTxTAbonar.getText().matches("^[0-9]*\\.?[0-9]*$") || AbonosTxTAbonar.getText().equals("") || Double.parseDouble(AbonosTxTAbonar.getText()) < 0) {
                     AbonosTxtSaldoFinal.setText("");
                     AbonoBtnAbonar.setEnabled(false);
                 } else {
@@ -384,7 +404,6 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mn.abonarSaldo(con, dataAbonos());
-                AbonoTablealumnos.setModel(mn.showAlumnos(con));
                 limpiar();
             }
         });
@@ -433,22 +452,109 @@ public class App {
                 }
             }
         });
+        ProductosComboCategoria.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProductosTable.setModel(mn.filterProductos(con, dataProductos()));
+            }
+        });
+        VentasBtnOtros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Otros");
+            }
+        });
+        ProductosTxTCodigo.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                ProductosTable.setModel(mn.filterProductos(con, dataProductos()));
+            }
+        });
+        ProductosTxtNombre.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                ProductosTable.setModel(mn.filterProductos(con, dataProductos()));
+            }
+        });
+        ProductosTxtPrecio.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                ProductosTable.setModel(mn.filterProductos(con, dataProductos()));
+            }
+        });
+        ProductosTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = ProductosTable.getSelectedRow();
+                ProductosTxTCodigo.setText(ProductosTable.getValueAt(row, 0).toString());
+                ProductosTxtNombre.setText(ProductosTable.getValueAt(row, 1).toString());
+                ProductosTxtPrecio.setText(ProductosTable.getValueAt(row, 2).toString());
+                ProductosComboCategoria.setSelectedItem(ProductosTable.getValueAt(row, 3).toString());
+                ProductosBtnGuardar.setEnabled(true);
+                ProductosBtnEditar.setEnabled(true);
+            }
+        });
+        ProductosBtnGuardar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mn.createProductos(con,dataProductos());
+                limpiar();
+            }
+        });
+        VentasBtnDesayunos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Desayunos");
+            }
+        });
+        VentasBtnAlmuerzos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Almuerzos");
+            }
+        });
+        VentasBtnSnacks.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Snacks");
+            }
+        });
+        VentasBtnBebidas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Bebidas");
+            }
+        });
+        VentasBtnPostres.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popout pop=new Popout(con,"Postres");
+            }
+        });
     }
 
     void init() {
+        setUndecorated(true);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }
-        JFrame frame = new JFrame();
-        frame.setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
 
-        frame.setTitle("Sistema Cafeteria");
-        frame.setContentPane(AppPrincipal);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(1000, 600);
-        frame.setVisible(true);
+        setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
+
+        setTitle("Sistema Cafeteria");
+        setContentPane(AppPrincipal);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setSize(1000, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setUndecorated(true);
+        setLocationRelativeTo(null);
+        setVisible(true);
 
 
     }
@@ -459,14 +565,16 @@ public class App {
         VentasAlumnosTable.setDefaultEditor(Object.class, null);
         AbonoTablealumnos.setModel(mn.showAlumnos(con));
         AbonoTablealumnos.setDefaultEditor(Object.class, null);
-        //VentasAlumnosTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Grado", "Saldo"}));
         VentasFacturaActualTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Cantidad", "Total"}));
+        VentasFacturaActualTable.setDefaultEditor(Object.class, null);
         HistorialTableAlumnos.setModel(mn.showAlumnos(con));
         HistorialTableAlumnos.setDefaultEditor(Object.class, null);
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance Inicial", "Total", "Balance Final"}));
         HistorialTableShortFactura.setDefaultEditor(Object.class, null);
         UsuariosTableLista.setModel(mn.showUsuarios(con));
         UsuariosTableLista.setDefaultEditor(Object.class, null);
+        ProductosTable.setModel(mn.showProductos(con));
+        ProductosTable.setDefaultEditor(Object.class, null);
 
     }
 
@@ -513,9 +621,37 @@ public class App {
         };
         return data;
     }
+    public String[] dataProductos(){
+        if(ProductosComboCategoria.getSelectedIndex()==0){
+            String[] data = {
+                    ProductosTxTCodigo.getText(),
+                    ProductosTxtNombre.getText(),
+                    ProductosTxtPrecio.getText(),
+                    "",
+
+            };
+            return data;
+        }else {
+            String[] data = {
+                    ProductosTxTCodigo.getText(),
+                    ProductosTxtNombre.getText(),
+                    ProductosTxtPrecio.getText(),
+                    ProductosComboCategoria.getSelectedItem().toString(),
+            };
+            if(!data[3].equals("")&& !ProductosTxtNombre.getText().equals("")&& ProductosTxtPrecio.getText().matches("^[0-9]*\\.?[0-9]*$")){
+                ProductosBtnEditar.setEnabled(true);
+                ProductosBtnGuardar.setEnabled(true);
+            }else {
+                ProductosBtnEditar.setEnabled(false);
+                ProductosBtnGuardar.setEnabled(false);
+            }
+            return data;
+        }
+    }
 
 
     public void limpiar() {
+        //clear all ventas  fields
         VentasTxtCodigo.setText("");
         VentasTxtNombre.setText("");
         VentasTxtGrado.setText("");
@@ -523,6 +659,8 @@ public class App {
         VentasTxtSaldo.setBackground(Color.white);
         VentasTxtTotalActual.setText("");
         VentasTxtTotalActual.setBackground(Color.white);
+
+        //clear all abonos  fields
         AbonosTxtCodigo.setText("");
         AbonosTxtNombre.setText("");
         AbonosTxtGrado.setText("");
@@ -530,11 +668,15 @@ public class App {
         AbonosTxtSaldoActual.setBackground(Color.white);
         AbonosTxTAbonar.setText("");
         AbonosTxtSaldoFinal.setText("");
+
+        //clear all usuarios  fields
         UsuariosTxTcodigo.setText("");
         UsuariosTxtUser.setText("");
         UsuariosTxtNombre.setText("");
         UsuariosTxtContra.setText("");
         UsuariosComboTipo.setSelectedIndex(0);
+
+        //clear all historial fields
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance inicial", "Total", "Balance Final"}));
         HistorialTxtCodigo.setText("");
         HistorialTxtNombre.setText("");
@@ -544,6 +686,20 @@ public class App {
         HistorialComboMes.setSelectedIndex(0);
         HistorialTxTYear.setText("");
         HistorialComboDia.setSelectedIndex(0);
+
+        //clear all productos fields
+        ProductosTxTCodigo.setText("");
+        ProductosTxtNombre.setText("");
+        ProductosTxtPrecio.setText("");
+        ProductosComboCategoria.setSelectedIndex(0);
+        ProductosBtnEditar.setEnabled(false);
+        ProductosBtnGuardar.setEnabled(false);
+
+        //update the tables if data is changed
+        VentasAlumnosTable.setModel(mn.showAlumnos(conn));
+        AbonoTablealumnos.setModel(mn.showAlumnos(conn));
+        HistorialTableAlumnos.setModel(mn.showAlumnos(conn));
+
 
 
     }
