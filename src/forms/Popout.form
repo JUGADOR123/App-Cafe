@@ -72,12 +72,14 @@
         <constraints border-constraint="South"/>
         <properties>
           <background color="-8750470"/>
+          <minimumSize width="356" height="80"/>
+          <preferredSize width="356" height="80"/>
         </properties>
         <border type="none"/>
         <children>
           <component id="6b088" class="javax.swing.JButton" binding="PopoutBtnCancelar">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Cancelar"/>
@@ -85,25 +87,28 @@
           </component>
           <component id="8595a" class="javax.swing.JButton" binding="PopoutBtnAceptar">
             <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Aceptar"/>
             </properties>
           </component>
-          <component id="1943b" class="javax.swing.JLabel" binding="PopoutLabelCantidad">
+          <component id="ca0c9" class="javax.swing.JSpinner" binding="PopoutSpinner">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Cantidad"/>
+              <font size="24"/>
             </properties>
           </component>
-          <component id="ca0c9" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+          <component id="691c5" class="javax.swing.JLabel" binding="PopoutLabelCantidad">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="4" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <foreground color="-16777216"/>
+              <text value="Cantidad:"/>
+            </properties>
           </component>
         </children>
       </grid>

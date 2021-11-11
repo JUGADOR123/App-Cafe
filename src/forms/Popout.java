@@ -18,16 +18,18 @@ public class Popout extends JFrame{
     private JPanel PopoutPanelPrincipal;
     private JButton PopoutBtnCancelar;
     private JButton PopoutBtnAceptar;
-    private JSpinner spinner1;
+    private JSpinner PopoutSpinner;
     private JPanel PopoutPanelControles;
-    private JLabel PopoutLabelCantidad;
     private JTable PopoutProductos;
     private JScrollPane PopoutScroll;
+    private JLabel PopoutLabelCantidad;
 
     public Popout(Connection con, String categoria) {
         init();
         PopoutCategoria.setText("Productos "+categoria);
         PopoutProductos.setModel(pt.mostrarProductosCategoria(con, categoria));
+        PopoutSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+        PopoutSpinner.getComponent(0).setPreferredSize(new Dimension(100, 80));
         PopoutBtnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,7 +47,8 @@ public class Popout extends JFrame{
         setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setSize(600, 600);
+        setSize(600, 850);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(false);
         setAlwaysOnTop(true);
         setLocationRelativeTo(null);
