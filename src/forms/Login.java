@@ -74,7 +74,17 @@ public class Login extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setAlwaysOnTop(true);
+        font();
         setVisible(true);
 
+    }
+    void font(){
+        Font font=new Font("Monserrat",Font.ITALIC,20);
+        login_label_titulo.setFont(font);
+        login_titulo.setFont(font);
+        login_label_pass.setFont(font);
+        login_btn_login.setFont(font);
+        login_btn_cancelar.setFont(font);
+        login_txt_user.setFont(font);
     }
 }

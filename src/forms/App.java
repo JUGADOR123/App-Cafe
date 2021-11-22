@@ -1,5 +1,6 @@
 package forms;
 
+import Code.popoutqueries;
 import Code.sqlqueries;
 
 import javax.swing.*;
@@ -8,91 +9,42 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 
-public class App extends JFrame{
+public class App extends JFrame {
+    private final Connection conn;
     sqlqueries mn = new sqlqueries();
+    popoutqueries pt=new popoutqueries();
+
     private JPanel AppPrincipal;
-    private JPanel AppTopBar;
-    private JLabel AppLogo;
-    private JLabel AppTitulo;
-    private JPanel AppPanelPrincipal;
     private JTabbedPane AppPestanas;
-    private JPanel VentasDatosAlumnos;
     private JTextField VentasTxtCodigo;
     private JTextField VentasTxtNombre;
     private JTextField VentasTxtGrado;
     private JTextField VentasTxtSaldo;
-    private JLabel VentasCodigoAlumno;
-    private JLabel VentasNombre;
-    private JLabel VentasGrado;
-    private JLabel VentasSaldo;
     private JTable VentasAlumnosTable;
-    private JScrollPane VentasAlumnosScroll;
-    private JPanel VentasFacturaActual;
-    private JScrollPane VentasFacturaActualScroll;
     private JTable VentasFacturaActualTable;
     private JButton VentasBtnCancelar;
-    private JButton VentasBtnBorrar;
-    private JButton VentasBtnCobrar;
     private JTextField VentasTxtTotalActual;
-    private JLabel VentasLabelTotal;
-    private JLabel VentasLabelProductos;
     private JButton VentasBtnDesayunos;
     private JButton VentasBtnOtros;
     private JButton VentasBtnAlmuerzos;
     private JButton VentasBtnBebidas;
     private JButton VentasBtnSnacks;
     private JButton VentasBtnPostres;
-    private JPanel VentasPanelProductos;
-    private JPanel VentasPanelBotones;
-    private JPanel VentasPanelFacturaControles;
     private JButton VentasBtnLimpiar;
-    private JPanel AppPanelVentas;
-    private JPanel AppPanelAbonos;
-    private JPanel AbonosRegistroMain;
-    private JPanel AbonosDatosPanelMain;
-    private JLabel AbonosLabelDatos;
-    private JPanel AbonosDatosPanel;
     private JTextField AbonosTxtCodigo;
     private JTextField AbonosTxtNombre;
     private JTextField AbonosTxtGrado;
     private JTextField AbonosTxtSaldoActual;
     private JTextField AbonosTxTAbonar;
     private JTextField AbonosTxtSaldoFinal;
-    private JLabel AbonosLabelCodigo;
-    private JLabel AbonosLabelNombre;
-    private JLabel AbonosLabelGrado;
-    private JLabel AbonosLabelSaldoActual;
-    private JLabel AbonosLabelAbonar;
-    private JLabel AbonosLabelSaldoFinal;
     private JButton AbonoBtnAbonar;
     private JButton AbonoBtnCancelar;
     private JTable AbonoTablealumnos;
-    private JPanel AbonoPanelControles;
-    private JScrollPane AbonoScrollalumnos;
-    private JLabel VentasLabelFactura;
-    private JPanel AppPanelHistorial;
-    private JPanel HistorialPanelDatos;
-    private JPanel HistorialPanelShortFactura;
-    private JScrollPane HistorialScrollShortFactura;
     private JTable HistorialTableShortFactura;
-    private JPanel HistorialPanelFactura;
-    private JScrollPane HistorialScrollFactura;
-    private JTable HistorialTableFactura;
-    private JLabel HistorialLabelCalendario;
-    private JLabel HsitorialLabelFactura;
-    private JLabel HistorialLabelFacturaShort;
-    private JLabel HistorialLabelDatos;
-    private JPanel HistorialPanelMDatos;
     private JTextField HistorialTxtCodigo;
     private JTextField HistorialTxtNombre;
     private JTextField HistorialTxtGrado;
     private JTextField HistorialTxtSaldo;
-    private JLabel HistorialLabelCodigo;
-    private JLabel HistorialLabelNombre;
-    private JLabel HistorialLabelGrado;
-    private JLabel HistorialLabelSaldo;
-    private JPanel HistorialPanelAlumnos;
-    private JScrollPane HistorialScrollAlumnos;
     private JTable HistorialTableAlumnos;
     private JButton UsuariosBtnGuardar;
     private JButton UsuariosBtnActualizar;
@@ -101,30 +53,85 @@ public class App extends JFrame{
     private JTextField UsuariosTxtUser;
     private JTextField UsuariosTxtNombre;
     private JTextField UsuariosTxTcodigo;
-    private JComboBox UsuariosComboTipo;
-    private JPanel AppPanelCrearUsuarios;
-    private JPanel UsuariosDatosPanel;
-    private JLabel UsuariosLabelCodigo;
-    private JLabel UusuariosLabelNombre;
-    private JLabel UsuariosLabelUsuarios;
+    private JComboBox<String> UsuariosComboTipo;
     private JPasswordField UsuariosTxtContra;
-    private JLabel UsuarioLabelContra;
-    private JLabel UsuariosLabelTipo;
-    private JPanel UsuariosPanelLista;
-    private JPanel UsuariosPanelControles;
-    private JScrollPane UsuariosScrollLista;
     private JButton UsuariosBtnCancelar;
     private JButton AppBtnCerrarSesion;
     private JButton HistorialBtnLimpiar;
     private JTextField HistorialTxTYear;
     private JComboBox HistorialComboMes;
     private JComboBox HistorialComboDia;
-    private JPanel AppPanelProductos;
     private JTable ProductosTable;
     private JTextField ProductosTxTCodigo;
     private JTextField ProductosTxtNombre;
     private JTextField ProductosTxtPrecio;
     private JComboBox ProductosComboCategoria;
+    private JButton ProductosBtnGuardar;
+    private JButton ProductosBtnEditar;
+    private JPanel AppCard;
+    private JPanel AppTopBar;
+    private JLabel AppLogo;
+    private JLabel AppTitulo;
+    private JPanel AppPanelPrincipal;
+    private JPanel AppPanelVentas;
+    private JPanel VentasDatosAlumnos;
+    private JLabel VentasCodigoAlumno;
+    private JLabel VentasNombre;
+    private JLabel VentasGrado;
+    private JLabel VentasSaldo;
+    private JScrollPane VentasAlumnosScroll;
+    private JPanel VentasFacturaActual;
+    private JScrollPane VentasFacturaActualScroll;
+    private JPanel VentasPanelFacturaControles;
+    private JButton VentasBtnBorrar;
+    private JButton VentasBtnCobrar;
+    private JLabel VentasLabelTotal;
+    private JLabel VentasLabelFactura;
+    private JPanel VentasPanelProductos;
+    private JPanel VentasPanelBotones;
+    private JLabel VentasLabelProductos;
+    private JPanel AppPanelAbonos;
+    private JPanel AbonosRegistroMain;
+    private JScrollPane AbonoScrollalumnos;
+    private JPanel AbonoPanelControles;
+    private JPanel AbonosDatosPanelMain;
+    private JPanel AbonosDatosPanel;
+    private JLabel AbonosLabelCodigo;
+    private JLabel AbonosLabelNombre;
+    private JLabel AbonosLabelGrado;
+    private JLabel AbonosLabelSaldoActual;
+    private JLabel AbonosLabelAbonar;
+    private JLabel AbonosLabelSaldoFinal;
+    private JLabel AbonosLabelDatos;
+    private JPanel AppPanelHistorial;
+    private JPanel HistorialPanelDatos;
+    private JLabel HistorialLabelDatos;
+    private JPanel HistorialPanelMDatos;
+    private JLabel HistorialLabelCodigo;
+    private JLabel HistorialLabelNombre;
+    private JLabel HistorialLabelGrado;
+    private JLabel HistorialLabelSaldo;
+    private JLabel HistorialLabelCalendario;
+    private JPanel HistorialPanelShortFactura;
+    private JScrollPane HistorialScrollShortFactura;
+    private JLabel HistorialLabelFacturaShort;
+    private JPanel HistorialPanelFactura;
+    private JScrollPane HistorialScrollFactura;
+    private JTable HistorialTableFactura;
+    private JLabel HsitorialLabelFactura;
+    private JPanel HistorialPanelAlumnos;
+    private JScrollPane HistorialScrollAlumnos;
+    private JPanel AppPanelCrearUsuarios;
+    private JPanel UsuariosDatosPanel;
+    private JLabel UsuariosLabelCodigo;
+    private JLabel UsuariosLabelNombre;
+    private JLabel UsuariosLabelUsuarios;
+    private JLabel UsuariosLabelTipo;
+    private JLabel UsuarioLabelContra;
+    private JPanel UsuariosPanelLista;
+    private JPanel UsuariosPanelControles;
+    private JScrollPane UsuariosScrollLista;
+    private JPanel AppPanelProductos;
     private JPanel ProductosPanelDatos;
     private JLabel ProductosLabelCodigo;
     private JLabel ProductosLabelNombre;
@@ -132,25 +139,45 @@ public class App extends JFrame{
     private JLabel ProductosLabelTipo;
     private JPanel ProductosPanelTable;
     private JPanel ProductosPanelControles;
-    private JScrollPane ProductosScroll;
-    private JButton ProductosBtnGuardar;
-    private JButton ProductosBtnEditar;
     private JButton ProductosBtnBorrar;
     private JButton ProductosBtnCancelar;
-    private Connection conn;
+    private JScrollPane ProductosScroll;
+    private JPanel PopoutPrincipal;
+    private JPanel PopoutTopBar;
+    private JLabel PopoutLogo;
+    private JLabel PopoutCategoria;
+    private JPanel PopoutPanelPrincipal;
+    private JScrollPane PopoutScroll;
+    private JTable PopoutProductos;
+    private JPanel PopoutPanelControles;
+    private JButton PopoutBtnCancelar;
+    private JButton PopoutBtnAceptar;
+    private JSpinner PopoutSpinner;
+    private JLabel PopoutLabelCantidad;
+
+
+
+
 
 
     public App(String AccountType, Connection con) {
-        conn=con;
+        //create the connection
+        conn = con;
+        //set the cards
+        AppCard.setLayout(new CardLayout());
+        AppCard.add("principal",AppPrincipal);
+        AppCard.add("popout",PopoutPrincipal);
+        CardLayout cl = (CardLayout) AppCard.getLayout();
+        cl.show(AppCard, "principal");
+        //check account type
         System.out.println("Tipo de Cuenta: " + AccountType);
         init();
+        fonts();
         if (AccountType.equals("Usuario")) {
             AppPestanas.setEnabledAt(3, false);
             AppPestanas.setEnabledAt(4, false);
         }
         createTable(con);
-
-
         VentasAlumnosTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -458,12 +485,7 @@ public class App extends JFrame{
                 ProductosTable.setModel(mn.filterProductos(con, dataProductos()));
             }
         });
-        VentasBtnOtros.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Otros");
-            }
-        });
+
         ProductosTxTCodigo.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -501,58 +523,74 @@ public class App extends JFrame{
         ProductosBtnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mn.createProductos(con,dataProductos());
+                mn.createProductos(con, dataProductos());
                 limpiar();
             }
         });
         VentasBtnDesayunos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Desayunos");
+                initialize_popout(con, "Desayunos");
+               cl.show(AppCard,"popout");
             }
         });
         VentasBtnAlmuerzos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Almuerzos");
+                initialize_popout(con, "Almuerzos");
+                cl.show(AppCard,"popout");
+
             }
         });
         VentasBtnSnacks.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Snacks");
+                initialize_popout(con, "Snacks");
+                cl.show(AppCard,"popout");
             }
         });
         VentasBtnBebidas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Bebidas");
+                initialize_popout(con, "Bebidas");
+                cl.show(AppCard,"popout");
             }
         });
         VentasBtnPostres.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Popout pop=new Popout(con,"Postres");
+                initialize_popout(con, "Postres");
+                cl.show(AppCard,"popout");
+            }
+        });
+        VentasBtnOtros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                initialize_popout(con, "Otros");
+                cl.show(AppCard, "popout");
+            }
+        });
+        PopoutBtnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(AppCard, "principal");
             }
         });
     }
 
-    void init() {
+    public void init() {
+
         setUndecorated(true);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {
-        }
-
+        } catch (Exception ignored) {}
         setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
-
         setTitle("Sistema Cafeteria");
-        setContentPane(AppPrincipal);
+        setContentPane(AppCard);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setSize(1000, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setUndecorated(true);
         setLocationRelativeTo(null);
         setVisible(true);
 
@@ -563,32 +601,70 @@ public class App extends JFrame{
 
         VentasAlumnosTable.setModel(mn.showAlumnos(con));
         VentasAlumnosTable.setDefaultEditor(Object.class, null);
+        VentasAlumnosTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        VentasAlumnosTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        VentasAlumnosTable.setRowHeight(VentasAlumnosTable.getFont().getSize() +VentasAlumnosTable.getRowMargin());
         AbonoTablealumnos.setModel(mn.showAlumnos(con));
         AbonoTablealumnos.setDefaultEditor(Object.class, null);
+        AbonoTablealumnos.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        AbonoTablealumnos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        AbonoTablealumnos.setRowHeight(AbonoTablealumnos.getFont().getSize() +AbonoTablealumnos.getRowMargin());
         VentasFacturaActualTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Cantidad", "Total"}));
         VentasFacturaActualTable.setDefaultEditor(Object.class, null);
+        VentasFacturaActualTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        VentasFacturaActualTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        VentasFacturaActualTable.setRowHeight(VentasFacturaActualTable.getFont().getSize() +VentasFacturaActualTable.getRowMargin());
         HistorialTableAlumnos.setModel(mn.showAlumnos(con));
         HistorialTableAlumnos.setDefaultEditor(Object.class, null);
+        HistorialTableAlumnos.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableAlumnos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableAlumnos.setRowHeight(HistorialTableAlumnos.getFont().getSize() +HistorialTableAlumnos.getRowMargin());
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance Inicial", "Total", "Balance Final"}));
         HistorialTableShortFactura.setDefaultEditor(Object.class, null);
+        HistorialTableShortFactura.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableShortFactura.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableShortFactura.setRowHeight(HistorialTableShortFactura.getFont().getSize() +HistorialTableShortFactura.getRowMargin());
+        HistorialTableFactura.setModel(new DefaultTableModel(null,new String[]{"Producto","Precio","Cantidad","Total"}));
+        HistorialTableFactura.setDefaultEditor(Object.class, null);
+        HistorialTableFactura.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableFactura.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        HistorialTableFactura.setRowHeight(HistorialTableFactura.getFont().getSize() +HistorialTableFactura.getRowMargin());
         UsuariosTableLista.setModel(mn.showUsuarios(con));
         UsuariosTableLista.setDefaultEditor(Object.class, null);
+        UsuariosTableLista.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        UsuariosTableLista.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        UsuariosTableLista.setRowHeight(UsuariosTableLista.getFont().getSize() +UsuariosTableLista.getRowMargin());
         ProductosTable.setModel(mn.showProductos(con));
         ProductosTable.setDefaultEditor(Object.class, null);
+        ProductosTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        ProductosTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        ProductosTable.setRowHeight(ProductosTable.getFont().getSize() +ProductosTable.getRowMargin());
 
+
+    }
+    private void initialize_popout(Connection con,String categoria){
+        PopoutCategoria.setText("Productos "+categoria);
+        PopoutProductos.setModel(pt.mostrarProductosCategoria(con, categoria));
+        PopoutProductos.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        PopoutProductos.setRowHeight(PopoutProductos.getFont().getSize() + PopoutProductos.getRowMargin());
+        PopoutProductos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        PopoutSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+        PopoutSpinner.getComponent(0).setPreferredSize(new Dimension(300, 100));
+        //set the font of the spinner to match the size of the table
+        PopoutSpinner.setFont(new Font("Montserrat", Font.ITALIC, 50));
+        ((JSpinner.DefaultEditor) PopoutSpinner.getEditor()).getTextField().setEditable(false);
     }
 
     public String[] dataVentas() {
-        String[] data = {
+        return new String[]{
                 VentasTxtCodigo.getText(),
                 VentasTxtNombre.getText(),
                 VentasTxtGrado.getText()
         };
-        return data;
     }
 
     public String[] dataAbonos() {
-        String[] data = {
+        return new String[]{
                 AbonosTxtCodigo.getText(),
                 AbonosTxtNombre.getText(),
                 AbonosTxtGrado.getText(),
@@ -597,51 +673,48 @@ public class App extends JFrame{
                 AbonosTxtSaldoFinal.getText()
 
         };
-        return data;
     }
 
     public String[] dataHistorial() {
-        String[] data = {
+        return new String[]{
                 HistorialTxtCodigo.getText(),
                 HistorialTxtNombre.getText(),
                 HistorialTxtGrado.getText(),
                 HistorialTxtSaldo.getText()
 
         };
-        return data;
     }
 
     public String[] dataUsuarios() {
-        String[] data = {
+        return new String[]{
                 UsuariosTxTcodigo.getText(),
                 UsuariosTxtUser.getText(),
                 UsuariosTxtNombre.getText(),
                 String.valueOf(UsuariosTxtContra.getPassword()),
                 UsuariosComboTipo.getSelectedItem().toString()
         };
-        return data;
     }
-    public String[] dataProductos(){
-        if(ProductosComboCategoria.getSelectedIndex()==0){
-            String[] data = {
+
+    public String[] dataProductos() {
+        if (ProductosComboCategoria.getSelectedIndex() == 0) {
+            return new String[]{
                     ProductosTxTCodigo.getText(),
                     ProductosTxtNombre.getText(),
                     ProductosTxtPrecio.getText(),
                     "",
 
             };
-            return data;
-        }else {
+        } else {
             String[] data = {
                     ProductosTxTCodigo.getText(),
                     ProductosTxtNombre.getText(),
                     ProductosTxtPrecio.getText(),
                     ProductosComboCategoria.getSelectedItem().toString(),
             };
-            if(!data[3].equals("")&& !ProductosTxtNombre.getText().equals("")&& ProductosTxtPrecio.getText().matches("^[0-9]*\\.?[0-9]*$")){
+            if (!data[3].equals("") && !ProductosTxtNombre.getText().equals("") && ProductosTxtPrecio.getText().matches("^[0-9]*\\.?[0-9]*$")) {
                 ProductosBtnEditar.setEnabled(true);
                 ProductosBtnGuardar.setEnabled(true);
-            }else {
+            } else {
                 ProductosBtnEditar.setEnabled(false);
                 ProductosBtnGuardar.setEnabled(false);
             }
@@ -687,6 +760,7 @@ public class App extends JFrame{
         HistorialTxTYear.setText("");
         HistorialComboDia.setSelectedIndex(0);
 
+
         //clear all productos fields
         ProductosTxTCodigo.setText("");
         ProductosTxtNombre.setText("");
@@ -701,12 +775,105 @@ public class App extends JFrame{
         HistorialTableAlumnos.setModel(mn.showAlumnos(conn));
 
 
-
     }
 
     public String date() {
         String date = "";
         date = (HistorialTxTYear.getText() + "-" + HistorialComboMes.getSelectedIndex()) + "-" + HistorialComboDia.getSelectedIndex();
         return date;
+    }
+    void fonts(){
+        Font font=new Font("Monserrat",Font.ITALIC,20);
+        AppTitulo.setFont(font);
+        AppBtnCerrarSesion.setFont(font);
+        //All Ventas' labels
+        VentasCodigoAlumno.setFont(font);
+        VentasNombre.setFont(font);
+        VentasGrado.setFont(font);
+        VentasSaldo.setFont(font);
+        VentasGrado.setFont(font);
+        VentasLabelFactura.setFont(font);
+        VentasLabelTotal.setFont(font);
+        VentasLabelProductos.setFont(font);
+        //All ventas text boxes
+        VentasTxtCodigo.setFont(font);
+        VentasTxtNombre.setFont(font);
+        VentasTxtGrado.setFont(font);
+        VentasTxtSaldo.setFont(font);
+        VentasTxtTotalActual.setFont(font);
+        //All ventas buttons
+        VentasBtnLimpiar.setFont(font);
+        VentasBtnCancelar.setFont(font);
+        VentasBtnBorrar.setFont(font);
+        VentasBtnCobrar.setFont(font);
+        //All Abono's labels
+        AbonosLabelCodigo.setFont(font);
+        AbonosLabelNombre.setFont(font);
+        AbonosLabelGrado.setFont(font);
+        AbonosLabelSaldoActual.setFont(font);
+        AbonosLabelAbonar.setFont(font);
+        AbonosLabelSaldoFinal.setFont(font);
+        //All abonos text boxes
+        AbonosTxtCodigo.setFont(font);
+        AbonosTxtNombre.setFont(font);
+        AbonosTxtGrado.setFont(font);
+        AbonosTxtSaldoActual.setFont(font);
+        AbonosTxTAbonar.setFont(font);
+        AbonosTxtSaldoFinal.setFont(font);
+        //All abonos buttons
+        AbonoBtnCancelar.setFont(font);
+        AbonoBtnAbonar.setFont(font);
+        //All historial labels
+        HistorialLabelCodigo.setFont(font);
+        HistorialLabelNombre.setFont(font);
+        HistorialLabelGrado.setFont(font);
+        HistorialLabelSaldo.setFont(font);
+        HistorialLabelCalendario.setFont(font);
+        HistorialLabelFacturaShort.setFont(font);
+        HsitorialLabelFactura.setFont(font);
+        //All historial text boxes
+        HistorialTxtCodigo.setFont(font);
+        HistorialTxtNombre.setFont(font);
+        HistorialTxtGrado.setFont(font);
+        HistorialTxtSaldo.setFont(font);
+        HistorialTxTYear.setFont(font);
+        HistorialComboDia.setFont(font);
+        HistorialComboMes.setFont(font);
+        //Historial Btns
+        HistorialBtnLimpiar.setFont(font);
+        //All usuarios labels
+        UsuariosLabelCodigo.setFont(font);
+        UsuariosLabelUsuarios.setFont(font);
+        UsuariosLabelNombre.setFont(font);
+        UsuarioLabelContra.setFont(font);
+        UsuariosLabelTipo.setFont(font);
+        //All usuarios text fields
+        UsuariosTxTcodigo.setFont(font);
+        UsuariosTxtUser.setFont(font);
+        UsuariosTxtNombre.setFont(font);
+        UsuariosTxtContra.setFont(font);
+        UsuariosComboTipo.setFont(font);
+        //All usuarios buttons
+        UsuariosBtnGuardar.setFont(font);
+        UsuariosBtnActualizar.setFont(font);
+        UsuariosBtnCancelar.setFont(font);
+        UsuariosBtnCancelar.setFont(font);
+        //All Productos labels
+        ProductosLabelCodigo.setFont(font);
+        ProductosLabelNombre.setFont(font);
+        ProductosLabelPrecio.setFont(font);
+        ProductosLabelTipo.setFont(font);
+        //All Productos text fields
+        ProductosTxTCodigo.setFont(font);
+        ProductosTxtNombre.setFont(font);
+        ProductosTxtPrecio.setFont(font);
+        ProductosComboCategoria.setFont(font);
+        //All Productos buttons
+        ProductosBtnGuardar.setFont(font);
+        ProductosBtnEditar.setFont(font);
+        ProductosBtnCancelar.setFont(font);
+        ProductosBtnBorrar.setFont(font);
+
+
     }
 }
