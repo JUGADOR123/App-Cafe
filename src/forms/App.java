@@ -192,6 +192,13 @@ public class App extends JFrame {
                 } else {
                     VentasTxtSaldo.setBackground(Color.GREEN);
                 }
+                VentasBtnAlmuerzos.setEnabled(true);
+                VentasBtnBebidas.setEnabled(true);
+                VentasBtnDesayunos.setEnabled(true);
+                VentasBtnOtros.setEnabled(true);
+                VentasBtnSnacks.setEnabled(true);
+                VentasBtnPostres.setEnabled(true);
+
             }
         });
         VentasTxtCodigo.addKeyListener(new KeyAdapter() {
@@ -576,6 +583,84 @@ public class App extends JFrame {
                 cl.show(AppCard, "principal");
             }
         });
+        PopoutProductos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = PopoutProductos.getSelectedRow();
+                if (row != -1 ){
+                    PopoutBtnAceptar.setEnabled(true);
+                }
+            }
+        });
+        PopoutBtnAceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row=PopoutProductos.getSelectedRow();
+                String[] data={
+                        PopoutProductos.getValueAt(row, 0).toString(),
+                        PopoutProductos.getValueAt(row, 1).toString(),
+                        PopoutSpinner.getValue().toString(),
+                        String.valueOf(Double.parseDouble(PopoutProductos.getValueAt(row, 2).toString())*Double.parseDouble(PopoutSpinner.getValue().toString()))
+
+                };
+                //append data as a row  to VentasFacturaActual
+                DefaultTableModel model = (DefaultTableModel) VentasFacturaActualTable.getModel();
+                model.addRow(data);
+                //add up all values in the column 4
+                double sum = 0;
+                for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
+                    sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
+                }
+                VentasTxtTotalActual.setText(String.valueOf(sum));
+                if (sum>Double.parseDouble(VentasTxtSaldo.getText())){
+                    VentasBtnCobrar.setEnabled(false);
+                    VentasTxtTotalActual.setBackground(Color.red);
+                }else{
+                    VentasBtnCobrar.setEnabled(true);
+                    VentasTxtTotalActual.setBackground(Color.GREEN);
+                }
+                cl.show(AppCard, "principal");
+
+
+            }
+        });
+        VentasFacturaActualTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = VentasFacturaActualTable.getSelectedRow();
+                if (row != -1 ){
+                    VentasBtnBorrar.setEnabled(true);
+                }
+            }
+        });
+        VentasBtnBorrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                DefaultTableModel model = (DefaultTableModel) VentasFacturaActualTable.getModel();
+                model.removeRow(VentasFacturaActualTable.getSelectedRow());
+
+                VentasBtnBorrar.setEnabled(false);
+                double sum = 0;
+                for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
+                    sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
+                }
+                VentasTxtTotalActual.setText(String.valueOf(sum));
+                if (sum>Double.parseDouble(VentasTxtSaldo.getText())){
+                    VentasBtnCobrar.setEnabled(false);
+                    VentasTxtTotalActual.setBackground(Color.red);
+                }else if (sum==0){
+                    VentasBtnCobrar.setEnabled(false);
+                    VentasTxtTotalActual.setBackground(Color.WHITE);
+                }else{
+                    VentasBtnCobrar.setEnabled(true);
+                    VentasTxtTotalActual.setBackground(Color.GREEN);
+                }
+
+            }
+        });
     }
 
     public void init() {
@@ -728,10 +813,18 @@ public class App extends JFrame {
         VentasTxtCodigo.setText("");
         VentasTxtNombre.setText("");
         VentasTxtGrado.setText("");
-        VentasTxtSaldo.setText("");
+        VentasTxtSaldo.setText("0.0");
         VentasTxtSaldo.setBackground(Color.white);
-        VentasTxtTotalActual.setText("");
+        VentasTxtTotalActual.setText("0.0");
         VentasTxtTotalActual.setBackground(Color.white);
+
+        //bloquear botones ventas
+        VentasBtnAlmuerzos.setEnabled(false);
+        VentasBtnBebidas.setEnabled(false);
+        VentasBtnDesayunos.setEnabled(false);
+        VentasBtnOtros.setEnabled(false);
+        VentasBtnSnacks.setEnabled(false);
+        VentasBtnPostres.setEnabled(false);
 
         //clear all abonos  fields
         AbonosTxtCodigo.setText("");

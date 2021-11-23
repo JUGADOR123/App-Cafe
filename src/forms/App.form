@@ -139,6 +139,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                           <component id="c3a2c" class="javax.swing.JTextField" binding="VentasTxtCodigo">
@@ -149,6 +150,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                           <component id="11444" class="javax.swing.JTextField" binding="VentasTxtGrado">
@@ -159,6 +161,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                               <text value=""/>
                             </properties>
                           </component>
@@ -171,6 +174,8 @@
                             <properties>
                               <background color="-1"/>
                               <editable value="false"/>
+                              <foreground color="-16777216"/>
+                              <text value="0.0"/>
                             </properties>
                           </component>
                           <scrollpane id="35df2" binding="VentasAlumnosScroll">
@@ -224,8 +229,7 @@
                               <component id="b7e55" class="javax.swing.JTable" binding="VentasFacturaActualTable">
                                 <constraints/>
                                 <properties>
-                                  <foreground color="-1"/>
-                                  <gridColor color="-1"/>
+                                  <gridColor color="-16777216"/>
                                 </properties>
                               </component>
                             </children>
@@ -255,6 +259,7 @@
                                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Borrar"/>
                                 </properties>
                               </component>
@@ -263,6 +268,7 @@
                                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Facturar"/>
                                 </properties>
                               </component>
@@ -284,6 +290,8 @@
                                 <properties>
                                   <background color="-1"/>
                                   <editable value="false"/>
+                                  <foreground color="-16777216"/>
+                                  <text value="0.0"/>
                                 </properties>
                               </component>
                             </children>
@@ -323,19 +331,12 @@
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="40638" class="javax.swing.JButton" binding="VentasBtnDesayunos">
-                                <constraints>
-                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                                </constraints>
-                                <properties>
-                                  <text value="Desayunos"/>
-                                </properties>
-                              </component>
                               <component id="77368" class="javax.swing.JButton" binding="VentasBtnOtros">
                                 <constraints>
                                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Otros"/>
                                 </properties>
                               </component>
@@ -344,6 +345,7 @@
                                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Almuerzos"/>
                                 </properties>
                               </component>
@@ -352,6 +354,7 @@
                                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Bebidas"/>
                                 </properties>
                               </component>
@@ -360,6 +363,7 @@
                                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Snacks"/>
                                 </properties>
                               </component>
@@ -368,7 +372,17 @@
                                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                                 </constraints>
                                 <properties>
+                                  <enabled value="false"/>
                                   <text value="Postres"/>
+                                </properties>
+                              </component>
+                              <component id="40638" class="javax.swing.JButton" binding="VentasBtnDesayunos">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <enabled value="false"/>
+                                  <text value="Desayunos"/>
                                 </properties>
                               </component>
                             </children>
@@ -487,6 +501,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="5c058" class="javax.swing.JTextField" binding="AbonosTxtNombre">
@@ -497,6 +512,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="5bd6e" class="javax.swing.JTextField" binding="AbonosTxtGrado">
@@ -507,6 +523,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="1ce43" class="javax.swing.JTextField" binding="AbonosTxtSaldoActual">
@@ -518,6 +535,7 @@
                                 <properties>
                                   <background color="-1"/>
                                   <editable value="false"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="8ece9" class="javax.swing.JTextField" binding="AbonosTxTAbonar">
@@ -528,6 +546,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="ea6b3" class="javax.swing.JTextField" binding="AbonosTxtSaldoFinal">
@@ -539,6 +558,7 @@
                                 <properties>
                                   <background color="-1"/>
                                   <editable value="false"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="15e22" class="javax.swing.JLabel" binding="AbonosLabelCodigo">
@@ -675,6 +695,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="5f192" class="javax.swing.JTextField" binding="HistorialTxtNombre">
@@ -685,6 +706,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="a7902" class="javax.swing.JTextField" binding="HistorialTxtGrado">
@@ -695,6 +717,7 @@
                                 </constraints>
                                 <properties>
                                   <background color="-1"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="9e800" class="javax.swing.JTextField" binding="HistorialTxtSaldo">
@@ -706,6 +729,7 @@
                                 <properties>
                                   <background color="-1"/>
                                   <editable value="false"/>
+                                  <foreground color="-16777216"/>
                                 </properties>
                               </component>
                               <component id="ba5e5" class="javax.swing.JLabel" binding="HistorialLabelCodigo">
@@ -783,7 +807,9 @@
                                     <preferred-size width="150" height="-1"/>
                                   </grid>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <foreground color="-16777216"/>
+                                </properties>
                               </component>
                               <component id="ae86e" class="javax.swing.JComboBox" binding="HistorialComboMes">
                                 <constraints>
@@ -1025,6 +1051,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                           <component id="2a72f" class="javax.swing.JTextField" binding="UsuariosTxtNombre">
@@ -1035,6 +1062,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                           <component id="9bf0d" class="javax.swing.JTextField" binding="UsuariosTxTcodigo">
@@ -1046,6 +1074,7 @@
                             <properties>
                               <background color="-1"/>
                               <editable value="true"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                           <component id="6f60e" class="javax.swing.JComboBox" binding="UsuariosComboTipo">
@@ -1078,6 +1107,7 @@
                             </constraints>
                             <properties>
                               <background color="-1"/>
+                              <foreground color="-16777216"/>
                             </properties>
                           </component>
                         </children>
@@ -1422,16 +1452,6 @@
                   <text value="Cancelar"/>
                 </properties>
               </component>
-              <component id="5c59" class="javax.swing.JButton" binding="PopoutBtnAceptar">
-                <constraints>
-                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="100"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <text value="Aceptar"/>
-                </properties>
-              </component>
               <component id="f827f" class="javax.swing.JSpinner" binding="PopoutSpinner">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -1447,6 +1467,17 @@
                 <properties>
                   <foreground color="-16777216"/>
                   <text value="Cantidad:"/>
+                </properties>
+              </component>
+              <component id="5c59" class="javax.swing.JButton" binding="PopoutBtnAceptar">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="100"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Aceptar"/>
                 </properties>
               </component>
             </children>

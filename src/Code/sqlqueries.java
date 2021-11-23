@@ -239,7 +239,7 @@ public class sqlqueries {
             while(rs.next()){
                 registros[0]=rs.getString("codigo");
                 registros[1]=rs.getString("producto");
-                registros[2]=("$"+rs.getString("precio"));
+                registros[2]=(rs.getString("precio"));
                 registros[3]=rs.getString("categoria");
                 modelo.addRow(registros);
             }
