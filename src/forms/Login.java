@@ -21,6 +21,7 @@ public class Login extends JFrame {
     private JPasswordField login_txt_pass;
     private JButton login_btn_login;
     private JButton login_btn_cancelar;
+
     public Login(Connection con) {
         init();
         login_btn_login.addActionListener(new ActionListener() {
@@ -78,8 +79,9 @@ public class Login extends JFrame {
         setVisible(true);
 
     }
-    void font(){
-        Font font=new Font("Monserrat",Font.ITALIC,20);
+
+    void font() {
+        Font font = new Font("Monserrat", Font.PLAIN, 20);
         login_label_titulo.setFont(font);
         login_titulo.setFont(font);
         login_label_pass.setFont(font);

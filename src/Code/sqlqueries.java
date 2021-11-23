@@ -228,64 +228,93 @@ public class sqlqueries {
         }
         return modelo;
     }
-    public DefaultTableModel showProductos(Connection con){
-        String[] titulos={"Codigo","Producto","Precio","Categoria"};
-        String[] registros=new String[4];
-        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+
+    public DefaultTableModel showProductos(Connection con) {
+        String[] titulos = {"Codigo", "Producto", "Precio", "Categoria"};
+        String[] registros = new String[4];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
-            String sql="SELECT * FROM productos";
-            PreparedStatement pst=con.prepareStatement(sql);
-            ResultSet rs=pst.executeQuery();
-            while(rs.next()){
-                registros[0]=rs.getString("codigo");
-                registros[1]=rs.getString("producto");
-                registros[2]=(rs.getString("precio"));
-                registros[3]=rs.getString("categoria");
+            String sql = "SELECT * FROM productos";
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                registros[0] = rs.getString("codigo");
+                registros[1] = rs.getString("producto");
+                registros[2] = (rs.getString("precio"));
+                registros[3] = rs.getString("categoria");
                 modelo.addRow(registros);
             }
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
         return modelo;
     }
-    public DefaultTableModel filterProductos(Connection con,String[] textos){
-        String[] titulos={"Codigo","Producto","Precio","Categoria"};
-        String[] registros=new String[4];
-        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+
+    public DefaultTableModel filterProductos(Connection con, String[] textos) {
+        String[] titulos = {"Codigo", "Producto", "Precio", "Categoria"};
+        String[] registros = new String[4];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
-            String sql="SELECT * FROM productos WHERE codigo LIKE ? AND  producto LIKE ? AND categoria LIKE ?";
-            PreparedStatement pst=con.prepareStatement(sql);
-            pst.setString(1,"%"+ textos[0]+"%");
-            pst.setString(2,"%"+ textos[1]+"%");
-            pst.setString(3, "%"+textos[3]+"%");
-            ResultSet rs=pst.executeQuery();
-            while(rs.next()){
-                registros[0]=rs.getString("codigo");
-                registros[1]=rs.getString("producto");
-                registros[2]=("$"+rs.getString("precio"));
-                registros[3]=rs.getString("categoria");
+            String sql = "SELECT * FROM productos WHERE codigo LIKE ? AND  producto LIKE ? AND categoria LIKE ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, "%" + textos[0] + "%");
+            pst.setString(2, "%" + textos[1] + "%");
+            pst.setString(3, "%" + textos[3] + "%");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                registros[0] = rs.getString("codigo");
+                registros[1] = rs.getString("producto");
+                registros[2] = ("$" + rs.getString("precio"));
+                registros[3] = rs.getString("categoria");
                 modelo.addRow(registros);
             }
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
         return modelo;
     }
-    public DefaultTableModel createProductos(Connection con,String[] textos){
-        String[] titulos={"Codigo","Producto","Precio","Categoria"};
-        String[] registros=new String[4];
-        DefaultTableModel modelo=new DefaultTableModel(null,titulos);
+
+    public DefaultTableModel createProductos(Connection con, String[] textos) {
+        String[] titulos = {"Codigo", "Producto", "Precio", "Categoria"};
+        String[] registros = new String[4];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
-            String sql="INSERT INTO productos (producto,precio,categoria) VALUES (?,?,?)";
-            PreparedStatement pst=con.prepareStatement(sql);
+            String sql = "INSERT INTO productos (producto,precio,categoria) VALUES (?,?,?)";
+            PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, textos[1]);
             pst.setString(2, textos[2]);
             pst.setString(3, textos[3]);
             pst.executeUpdate();
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
         return modelo;
+    }
+
+    public void createFactura(Connection con, String[] textos) {
+        try {
+            String SQL = "Insert into shortfactura (codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?)";
+            PreparedStatement pst = con.prepareStatement(SQL);
+            pst.setString(1, textos[0]);
+            pst.setString(2, "Compra");
+            pst.setDate(3, new Date(System.currentTimeMillis()));
+            pst.setString(4, textos[3]);
+            pst.setString(5, textos[4]);
+            pst.setString(6, String.valueOf(Double.valueOf(textos[3]) - Double.valueOf(textos[4])));
+            pst.execute();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        try {
+            String sql = "UPDATE estudiantes SET saldo=? where cod=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, String.valueOf(Double.valueOf(textos[3]) - Double.valueOf(textos[4])));
+            pst.setString(2, textos[0]);
+            pst.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error al actualizar saldo: " + e.getMessage());
+        }
+
     }
 
 

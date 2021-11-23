@@ -12,7 +12,7 @@ import java.sql.Connection;
 public class App extends JFrame {
     private final Connection conn;
     sqlqueries mn = new sqlqueries();
-    popoutqueries pt=new popoutqueries();
+    popoutqueries pt = new popoutqueries();
 
     private JPanel AppPrincipal;
     private JTabbedPane AppPestanas;
@@ -156,17 +156,13 @@ public class App extends JFrame {
     private JLabel PopoutLabelCantidad;
 
 
-
-
-
-
     public App(String AccountType, Connection con) {
         //create the connection
         conn = con;
         //set the cards
         AppCard.setLayout(new CardLayout());
-        AppCard.add("principal",AppPrincipal);
-        AppCard.add("popout",PopoutPrincipal);
+        AppCard.add("principal", AppPrincipal);
+        AppCard.add("popout", PopoutPrincipal);
         CardLayout cl = (CardLayout) AppCard.getLayout();
         cl.show(AppCard, "principal");
         //check account type
@@ -538,14 +534,14 @@ public class App extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize_popout(con, "Desayunos");
-               cl.show(AppCard,"popout");
+                cl.show(AppCard, "popout");
             }
         });
         VentasBtnAlmuerzos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize_popout(con, "Almuerzos");
-                cl.show(AppCard,"popout");
+                cl.show(AppCard, "popout");
 
             }
         });
@@ -553,21 +549,21 @@ public class App extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize_popout(con, "Snacks");
-                cl.show(AppCard,"popout");
+                cl.show(AppCard, "popout");
             }
         });
         VentasBtnBebidas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize_popout(con, "Bebidas");
-                cl.show(AppCard,"popout");
+                cl.show(AppCard, "popout");
             }
         });
         VentasBtnPostres.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize_popout(con, "Postres");
-                cl.show(AppCard,"popout");
+                cl.show(AppCard, "popout");
             }
         });
         VentasBtnOtros.addActionListener(new ActionListener() {
@@ -588,7 +584,7 @@ public class App extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int row = PopoutProductos.getSelectedRow();
-                if (row != -1 ){
+                if (row != -1) {
                     PopoutBtnAceptar.setEnabled(true);
                 }
             }
@@ -596,12 +592,12 @@ public class App extends JFrame {
         PopoutBtnAceptar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int row=PopoutProductos.getSelectedRow();
-                String[] data={
+                int row = PopoutProductos.getSelectedRow();
+                String[] data = {
                         PopoutProductos.getValueAt(row, 0).toString(),
                         PopoutProductos.getValueAt(row, 1).toString(),
                         PopoutSpinner.getValue().toString(),
-                        String.valueOf(Double.parseDouble(PopoutProductos.getValueAt(row, 2).toString())*Double.parseDouble(PopoutSpinner.getValue().toString()))
+                        String.valueOf(Math.round(Double.parseDouble(PopoutProductos.getValueAt(row, 2).toString()) * Double.parseDouble(PopoutSpinner.getValue().toString()) * 100.0) / 100.0)
 
                 };
                 //append data as a row  to VentasFacturaActual
@@ -613,10 +609,10 @@ public class App extends JFrame {
                     sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
                 }
                 VentasTxtTotalActual.setText(String.valueOf(sum));
-                if (sum>Double.parseDouble(VentasTxtSaldo.getText())){
+                if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
                     VentasTxtTotalActual.setBackground(Color.red);
-                }else{
+                } else {
                     VentasBtnCobrar.setEnabled(true);
                     VentasTxtTotalActual.setBackground(Color.GREEN);
                 }
@@ -630,7 +626,7 @@ public class App extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int row = VentasFacturaActualTable.getSelectedRow();
-                if (row != -1 ){
+                if (row != -1) {
                     VentasBtnBorrar.setEnabled(true);
                 }
             }
@@ -648,17 +644,24 @@ public class App extends JFrame {
                     sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
                 }
                 VentasTxtTotalActual.setText(String.valueOf(sum));
-                if (sum>Double.parseDouble(VentasTxtSaldo.getText())){
+                if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
                     VentasTxtTotalActual.setBackground(Color.red);
-                }else if (sum==0){
+                } else if (sum == 0) {
                     VentasBtnCobrar.setEnabled(false);
                     VentasTxtTotalActual.setBackground(Color.WHITE);
-                }else{
+                } else {
                     VentasBtnCobrar.setEnabled(true);
                     VentasTxtTotalActual.setBackground(Color.GREEN);
                 }
 
+            }
+        });
+        VentasBtnCobrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mn.createFactura(con, dataVentas());
+                limpiar();
             }
         });
     }
@@ -668,7 +671,8 @@ public class App extends JFrame {
         setUndecorated(true);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         setIconImage(new ImageIcon("imagenes/logo_colegio.png").getImage());
         setTitle("Sistema Cafeteria");
         setContentPane(AppCard);
@@ -686,57 +690,58 @@ public class App extends JFrame {
 
         VentasAlumnosTable.setModel(mn.showAlumnos(con));
         VentasAlumnosTable.setDefaultEditor(Object.class, null);
-        VentasAlumnosTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        VentasAlumnosTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        VentasAlumnosTable.setRowHeight(VentasAlumnosTable.getFont().getSize() +VentasAlumnosTable.getRowMargin());
+        VentasAlumnosTable.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        VentasAlumnosTable.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        VentasAlumnosTable.setRowHeight(VentasAlumnosTable.getFont().getSize() + VentasAlumnosTable.getRowMargin());
         AbonoTablealumnos.setModel(mn.showAlumnos(con));
         AbonoTablealumnos.setDefaultEditor(Object.class, null);
-        AbonoTablealumnos.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        AbonoTablealumnos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        AbonoTablealumnos.setRowHeight(AbonoTablealumnos.getFont().getSize() +AbonoTablealumnos.getRowMargin());
+        AbonoTablealumnos.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        AbonoTablealumnos.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        AbonoTablealumnos.setRowHeight(AbonoTablealumnos.getFont().getSize() + AbonoTablealumnos.getRowMargin());
         VentasFacturaActualTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Cantidad", "Total"}));
         VentasFacturaActualTable.setDefaultEditor(Object.class, null);
-        VentasFacturaActualTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        VentasFacturaActualTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        VentasFacturaActualTable.setRowHeight(VentasFacturaActualTable.getFont().getSize() +VentasFacturaActualTable.getRowMargin());
+        VentasFacturaActualTable.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        VentasFacturaActualTable.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        VentasFacturaActualTable.setRowHeight(VentasFacturaActualTable.getFont().getSize() + VentasFacturaActualTable.getRowMargin());
         HistorialTableAlumnos.setModel(mn.showAlumnos(con));
         HistorialTableAlumnos.setDefaultEditor(Object.class, null);
-        HistorialTableAlumnos.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableAlumnos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableAlumnos.setRowHeight(HistorialTableAlumnos.getFont().getSize() +HistorialTableAlumnos.getRowMargin());
+        HistorialTableAlumnos.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableAlumnos.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableAlumnos.setRowHeight(HistorialTableAlumnos.getFont().getSize() + HistorialTableAlumnos.getRowMargin());
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance Inicial", "Total", "Balance Final"}));
         HistorialTableShortFactura.setDefaultEditor(Object.class, null);
-        HistorialTableShortFactura.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableShortFactura.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableShortFactura.setRowHeight(HistorialTableShortFactura.getFont().getSize() +HistorialTableShortFactura.getRowMargin());
-        HistorialTableFactura.setModel(new DefaultTableModel(null,new String[]{"Producto","Precio","Cantidad","Total"}));
+        HistorialTableShortFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableShortFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableShortFactura.setRowHeight(HistorialTableShortFactura.getFont().getSize() + HistorialTableShortFactura.getRowMargin());
+        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Producto", "Precio", "Cantidad", "Total"}));
         HistorialTableFactura.setDefaultEditor(Object.class, null);
-        HistorialTableFactura.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableFactura.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        HistorialTableFactura.setRowHeight(HistorialTableFactura.getFont().getSize() +HistorialTableFactura.getRowMargin());
+        HistorialTableFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        HistorialTableFactura.setRowHeight(HistorialTableFactura.getFont().getSize() + HistorialTableFactura.getRowMargin());
         UsuariosTableLista.setModel(mn.showUsuarios(con));
         UsuariosTableLista.setDefaultEditor(Object.class, null);
-        UsuariosTableLista.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        UsuariosTableLista.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        UsuariosTableLista.setRowHeight(UsuariosTableLista.getFont().getSize() +UsuariosTableLista.getRowMargin());
+        UsuariosTableLista.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        UsuariosTableLista.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        UsuariosTableLista.setRowHeight(UsuariosTableLista.getFont().getSize() + UsuariosTableLista.getRowMargin());
         ProductosTable.setModel(mn.showProductos(con));
         ProductosTable.setDefaultEditor(Object.class, null);
-        ProductosTable.setFont(new Font("Montserrat", Font.ITALIC, 20));
-        ProductosTable.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
-        ProductosTable.setRowHeight(ProductosTable.getFont().getSize() +ProductosTable.getRowMargin());
+        ProductosTable.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        ProductosTable.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
+        ProductosTable.setRowHeight(ProductosTable.getFont().getSize() + ProductosTable.getRowMargin());
 
 
     }
-    private void initialize_popout(Connection con,String categoria){
-        PopoutCategoria.setText("Productos "+categoria);
+
+    private void initialize_popout(Connection con, String categoria) {
+        PopoutCategoria.setText("Productos " + categoria);
         PopoutProductos.setModel(pt.mostrarProductosCategoria(con, categoria));
-        PopoutProductos.setFont(new Font("Montserrat", Font.ITALIC, 20));
+        PopoutProductos.setFont(new Font("Montserrat", Font.PLAIN, 20));
         PopoutProductos.setRowHeight(PopoutProductos.getFont().getSize() + PopoutProductos.getRowMargin());
-        PopoutProductos.getTableHeader().setFont(new Font("Montserrat", Font.ITALIC, 20));
+        PopoutProductos.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
         PopoutSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
         PopoutSpinner.getComponent(0).setPreferredSize(new Dimension(300, 100));
         //set the font of the spinner to match the size of the table
-        PopoutSpinner.setFont(new Font("Montserrat", Font.ITALIC, 50));
+        PopoutSpinner.setFont(new Font("Montserrat", Font.PLAIN, 50));
         ((JSpinner.DefaultEditor) PopoutSpinner.getEditor()).getTextField().setEditable(false);
     }
 
@@ -744,7 +749,9 @@ public class App extends JFrame {
         return new String[]{
                 VentasTxtCodigo.getText(),
                 VentasTxtNombre.getText(),
-                VentasTxtGrado.getText()
+                VentasTxtGrado.getText(),
+                VentasTxtSaldo.getText(),
+                VentasTxtTotalActual.getText(),
         };
     }
 
@@ -817,6 +824,7 @@ public class App extends JFrame {
         VentasTxtSaldo.setBackground(Color.white);
         VentasTxtTotalActual.setText("0.0");
         VentasTxtTotalActual.setBackground(Color.white);
+        VentasFacturaActualTable.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Nombre", "Cantidad", "Total"}));
 
         //bloquear botones ventas
         VentasBtnAlmuerzos.setEnabled(false);
@@ -875,8 +883,9 @@ public class App extends JFrame {
         date = (HistorialTxTYear.getText() + "-" + HistorialComboMes.getSelectedIndex()) + "-" + HistorialComboDia.getSelectedIndex();
         return date;
     }
-    void fonts(){
-        Font font=new Font("Monserrat",Font.ITALIC,20);
+
+    void fonts() {
+        Font font = new Font("Monserrat", Font.PLAIN, 20);
         AppTitulo.setFont(font);
         AppBtnCerrarSesion.setFont(font);
         //All Ventas' labels
