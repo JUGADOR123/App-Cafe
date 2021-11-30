@@ -456,7 +456,6 @@ public class App extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //if ComboDia and ComboMes and year are not empty
                 if (HistorialComboDia.getSelectedIndex() != 0 && HistorialComboMes.getSelectedIndex() != 0 && HistorialTxTYear.getText().length() == 4) {
-                    System.out.println("entro");
                     HistorialTableShortFactura.setModel(mn.filterFacturaShort(con, HistorialTxtCodigo.getText(), date()));
                 }
             }
@@ -466,7 +465,6 @@ public class App extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //if ComboDia and ComboMes and year are not empty
                 if (HistorialComboDia.getSelectedIndex() != 0 && HistorialComboMes.getSelectedIndex() != 0 && HistorialTxTYear.getText().length() == 4) {
-                    System.out.println("entro");
                     HistorialTableShortFactura.setModel(mn.filterFacturaShort(con, HistorialTxtCodigo.getText(), date()));
                 }
             }
@@ -477,7 +475,6 @@ public class App extends JFrame {
                 super.keyReleased(e);
                 //if ComboDia and ComboMes and year are not empty
                 if (HistorialComboDia.getSelectedIndex() != 0 && HistorialComboMes.getSelectedIndex() != 0 && HistorialTxTYear.getText().length() == 4) {
-                    System.out.println("entro");
                     HistorialTableShortFactura.setModel(mn.filterFacturaShort(con, HistorialTxtCodigo.getText(), date()));
                 }
             }
