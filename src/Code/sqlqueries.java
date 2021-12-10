@@ -293,7 +293,7 @@ public class sqlqueries {
         return modelo;
     }
 
-    public void deleteProducto(Connection con,String[] textos){
+    public void deleteProducto(Connection con, String[] textos) {
         try {
             String sql = "DELETE FROM productos WHERE codigo=?";
             PreparedStatement pst = con.prepareStatement(sql);
@@ -334,21 +334,21 @@ public class sqlqueries {
 
         for (int i = 0; i < ids.length; i++) {
             try {
-                String SQL= "Insert into detallefactura (IdFactura,IdProducto,cantidad) VALUES(?,?,?)";
+                String SQL = "Insert into detallefactura (IdFactura,IdProducto,cantidad) VALUES(?,?,?)";
                 PreparedStatement pst = con.prepareStatement(SQL);
                 pst.setInt(1, random);
                 pst.setString(2, ids[i]);
                 pst.setString(3, cantidades[i]);
                 pst.execute();
-            }catch (Exception e){
-                System.out.println("Error: "+e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
     }
 
     public DefaultTableModel showDetalleFactura(Connection con, String codigo) {
-        String[] titulos = {"Categoria", "Producto", "Cantidad", "Precio","Subtotal"};
+        String[] titulos = {"Categoria", "Producto", "Cantidad", "Precio", "Subtotal"};
         String[] registros = new String[5];
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
         try {
@@ -361,7 +361,7 @@ public class sqlqueries {
                 registros[1] = rs.getString("producto");
                 registros[2] = rs.getString("cantidad");
                 registros[3] = rs.getString("precio");
-                registros[4]=String.valueOf(Math.round((Double.valueOf(registros[2])*Double.valueOf(registros[3])*100))/100);
+                registros[4] = String.valueOf(Math.round((Double.valueOf(registros[2]) * Double.valueOf(registros[3]) * 100)) / 100);
                 modelo.addRow(registros);
             }
         } catch (Exception e) {

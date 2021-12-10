@@ -607,7 +607,7 @@ public class App extends JFrame {
                 for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
                     sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
                 }
-                sum= Math.round(sum * 100.0) / 100.0;
+                sum = Math.round(sum * 100.0) / 100.0;
                 VentasTxtTotalActual.setText(String.valueOf(sum));
                 if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
@@ -644,7 +644,7 @@ public class App extends JFrame {
                 for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
                     sum += (Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString()));
                 }
-                sum=(double) Math.round(sum * 100.0) / 100.0;
+                sum = (double) Math.round(sum * 100.0) / 100.0;
                 VentasTxtTotalActual.setText(Double.valueOf(sum).toString());
                 if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
@@ -662,14 +662,14 @@ public class App extends JFrame {
         VentasBtnCobrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mn.createFactura(con, dataVentas(),idProductos(),cantidadesProductos());
+                mn.createFactura(con, dataVentas(), idProductos(), cantidadesProductos());
                 limpiar();
             }
         });
         ProductosBtnBorrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mn.deleteProducto(con,dataProductos());
+                mn.deleteProducto(con, dataProductos());
                 limpiar();
             }
         });
@@ -687,11 +687,11 @@ public class App extends JFrame {
                 //get the first letter of the 4th column
                 String accion = HistorialTableShortFactura.getValueAt(row, 2).toString();
                 if (row != -1) {
-                    String codigo=HistorialTableShortFactura.getValueAt(row, 0).toString();
+                    String codigo = HistorialTableShortFactura.getValueAt(row, 0).toString();
                     if (accion.equals("Compra")) {
-                        HistorialTableFactura.setModel(mn.showDetalleFactura(con,codigo));
-                    }else{
-                        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
+                        HistorialTableFactura.setModel(mn.showDetalleFactura(con, codigo));
+                    } else {
+                        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio", "Subtotal"}));
                     }
                 }
             }
@@ -745,7 +745,7 @@ public class App extends JFrame {
         HistorialTableShortFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableShortFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableShortFactura.setRowHeight(HistorialTableShortFactura.getFont().getSize() + HistorialTableShortFactura.getRowMargin());
-        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
+        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio", "Subtotal"}));
         HistorialTableFactura.setDefaultEditor(Object.class, null);
         HistorialTableFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -786,7 +786,8 @@ public class App extends JFrame {
                 VentasTxtTotalActual.getText(),
         };
     }
-    public String[] idProductos(){
+
+    public String[] idProductos() {
         //get  the values from  the first collumn of all the rows in ventasFacturaActualTable
         String[] ids = new String[VentasFacturaActualTable.getRowCount()];
         for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
@@ -794,7 +795,8 @@ public class App extends JFrame {
         }
         return ids;
     }
-    public String[] cantidadesProductos(){
+
+    public String[] cantidadesProductos() {
         String[] cantidades = new String[VentasFacturaActualTable.getRowCount()];
         for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
             cantidades[i] = VentasFacturaActualTable.getValueAt(i, 2).toString();
@@ -899,7 +901,7 @@ public class App extends JFrame {
 
         //clear all historial fields
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance inicial", "Total", "Balance Final"}));
-        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
+        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio", "Subtotal"}));
         HistorialTxtCodigo.setText("");
         HistorialTxtNombre.setText("");
         HistorialTxtGrado.setText("");
