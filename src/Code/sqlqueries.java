@@ -149,16 +149,18 @@ public class sqlqueries {
     }
 
     public void abonarSaldo(Connection con, String[] textos) {
+        int random = (int) (Math.random() * 10000000000L);
         //create factura
         try {
-            String sql = "INSERT INTO shortfactura (codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO shortfactura (IdShortFactura,codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, textos[0]);
-            pst.setString(2, "Abono a saldo");
-            pst.setDate(3, new Date(System.currentTimeMillis()));
-            pst.setString(4, textos[3]);
-            pst.setString(5, textos[4]);
-            pst.setString(6, textos[5]);
+            pst.setInt(1, random);
+            pst.setString(2, textos[0]);
+            pst.setString(3, "Abono a saldo");
+            pst.setDate(4, new Date(System.currentTimeMillis()));
+            pst.setString(5, textos[3]);
+            pst.setString(6, textos[4]);
+            pst.setString(7, textos[5]);
             pst.execute();
         } catch (Exception e) {
             System.out.println("Error al crear factura: " + e.getMessage());
@@ -186,7 +188,7 @@ public class sqlqueries {
             pst.setString(1, codigo);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                registros[0] = rs.getString("nofactura");
+                registros[0] = rs.getString("IdShortFactura");
                 registros[1] = rs.getString("date");
                 registros[2] = rs.getString("accion");
                 registros[3] = rs.getString("saldoinicial");
@@ -264,7 +266,7 @@ public class sqlqueries {
             while (rs.next()) {
                 registros[0] = rs.getString("codigo");
                 registros[1] = rs.getString("producto");
-                registros[2] = ("$" + rs.getString("precio"));
+                registros[2] = (rs.getString("precio"));
                 registros[3] = rs.getString("categoria");
                 modelo.addRow(registros);
             }
@@ -291,16 +293,31 @@ public class sqlqueries {
         return modelo;
     }
 
-    public void createFactura(Connection con, String[] textos) {
+    public void deleteProducto(Connection con,String[] textos){
         try {
-            String SQL = "Insert into shortfactura (codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?)";
-            PreparedStatement pst = con.prepareStatement(SQL);
+            String sql = "DELETE FROM productos WHERE codigo=?";
+            PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, textos[0]);
-            pst.setString(2, "Compra");
-            pst.setDate(3, new Date(System.currentTimeMillis()));
-            pst.setString(4, textos[3]);
-            pst.setString(5, textos[4]);
-            pst.setString(6, String.valueOf(Double.valueOf(textos[3]) - Double.valueOf(textos[4])));
+            pst.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void createFactura(Connection con, String[] textos, String[] ids, String[] cantidades) {
+        int random = (int) (Math.random() * 10000000000L);
+        Date date = new Date(System.currentTimeMillis());
+        try {
+            String SQL = "Insert into shortfactura (IdShortFactura,codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?,?)";
+            PreparedStatement pst = con.prepareStatement(SQL);
+
+            pst.setInt(1, random);
+            pst.setString(2, textos[0]);
+            pst.setString(3, "Compra");
+            pst.setDate(4, date);
+            pst.setString(5, textos[3]);
+            pst.setString(6, textos[4]);
+            pst.setString(7, String.valueOf(Double.valueOf(textos[3]) - Double.valueOf(textos[4])));
             pst.execute();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -315,7 +332,41 @@ public class sqlqueries {
             System.out.println("Error al actualizar saldo: " + e.getMessage());
         }
 
+        for (int i = 0; i < ids.length; i++) {
+            try {
+                String SQL= "Insert into detallefactura (IdFactura,IdProducto,cantidad) VALUES(?,?,?)";
+                PreparedStatement pst = con.prepareStatement(SQL);
+                pst.setInt(1, random);
+                pst.setString(2, ids[i]);
+                pst.setString(3, cantidades[i]);
+                pst.execute();
+            }catch (Exception e){
+                System.out.println("Error: "+e.getMessage());
+            }
+        }
+
     }
 
-
+    public DefaultTableModel showDetalleFactura(Connection con, String codigo) {
+        String[] titulos = {"Categoria", "Producto", "Cantidad", "Precio","Subtotal"};
+        String[] registros = new String[5];
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+        try {
+            String sql = "SELECT * FROM detallefactura INNER JOIN productos ON detallefactura.idProducto = productos.codigo WHERE detallefactura.idFactura=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, codigo);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                registros[0] = rs.getString("categoria");
+                registros[1] = rs.getString("producto");
+                registros[2] = rs.getString("cantidad");
+                registros[3] = rs.getString("precio");
+                registros[4]=String.valueOf(Math.round((Double.valueOf(registros[2])*Double.valueOf(registros[3])*100))/100);
+                modelo.addRow(registros);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return modelo;
+    }
 }

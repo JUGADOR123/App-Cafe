@@ -518,6 +518,7 @@ public class App extends JFrame {
                 ProductosComboCategoria.setSelectedItem(ProductosTable.getValueAt(row, 3).toString());
                 ProductosBtnGuardar.setEnabled(true);
                 ProductosBtnEditar.setEnabled(true);
+                ProductosBtnBorrar.setEnabled(true);
             }
         });
         ProductosBtnGuardar.addActionListener(new ActionListener() {
@@ -573,6 +574,7 @@ public class App extends JFrame {
         PopoutBtnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                PopoutBtnAceptar.setEnabled(false);
                 cl.show(AppCard, "principal");
             }
         });
@@ -605,6 +607,7 @@ public class App extends JFrame {
                 for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
                     sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
                 }
+                sum= Math.round(sum * 100.0) / 100.0;
                 VentasTxtTotalActual.setText(String.valueOf(sum));
                 if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
@@ -613,6 +616,7 @@ public class App extends JFrame {
                     VentasBtnCobrar.setEnabled(true);
                     VentasTxtTotalActual.setBackground(Color.GREEN);
                 }
+                PopoutBtnAceptar.setEnabled(false);
                 cl.show(AppCard, "principal");
 
 
@@ -638,9 +642,10 @@ public class App extends JFrame {
                 VentasBtnBorrar.setEnabled(false);
                 double sum = 0;
                 for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
-                    sum += Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString());
+                    sum += (Double.parseDouble(VentasFacturaActualTable.getValueAt(i, 3).toString()));
                 }
-                VentasTxtTotalActual.setText(String.valueOf(sum));
+                sum=(double) Math.round(sum * 100.0) / 100.0;
+                VentasTxtTotalActual.setText(Double.valueOf(sum).toString());
                 if (sum > Double.parseDouble(VentasTxtSaldo.getText())) {
                     VentasBtnCobrar.setEnabled(false);
                     VentasTxtTotalActual.setBackground(Color.red);
@@ -657,8 +662,38 @@ public class App extends JFrame {
         VentasBtnCobrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mn.createFactura(con, dataVentas());
+                mn.createFactura(con, dataVentas(),idProductos(),cantidadesProductos());
                 limpiar();
+            }
+        });
+        ProductosBtnBorrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mn.deleteProducto(con,dataProductos());
+                limpiar();
+            }
+        });
+        ProductosBtnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiar();
+            }
+        });
+        HistorialTableShortFactura.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int row = HistorialTableShortFactura.getSelectedRow();
+                //get the first letter of the 4th column
+                String accion = HistorialTableShortFactura.getValueAt(row, 2).toString();
+                if (row != -1) {
+                    String codigo=HistorialTableShortFactura.getValueAt(row, 0).toString();
+                    if (accion.equals("Compra")) {
+                        HistorialTableFactura.setModel(mn.showDetalleFactura(con,codigo));
+                    }else{
+                        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
+                    }
+                }
             }
         });
     }
@@ -710,7 +745,7 @@ public class App extends JFrame {
         HistorialTableShortFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableShortFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableShortFactura.setRowHeight(HistorialTableShortFactura.getFont().getSize() + HistorialTableShortFactura.getRowMargin());
-        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Producto", "Precio", "Cantidad", "Total"}));
+        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
         HistorialTableFactura.setDefaultEditor(Object.class, null);
         HistorialTableFactura.setFont(new Font("Montserrat", Font.PLAIN, 20));
         HistorialTableFactura.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -750,6 +785,21 @@ public class App extends JFrame {
                 VentasTxtSaldo.getText(),
                 VentasTxtTotalActual.getText(),
         };
+    }
+    public String[] idProductos(){
+        //get  the values from  the first collumn of all the rows in ventasFacturaActualTable
+        String[] ids = new String[VentasFacturaActualTable.getRowCount()];
+        for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
+            ids[i] = VentasFacturaActualTable.getValueAt(i, 0).toString();
+        }
+        return ids;
+    }
+    public String[] cantidadesProductos(){
+        String[] cantidades = new String[VentasFacturaActualTable.getRowCount()];
+        for (int i = 0; i < VentasFacturaActualTable.getRowCount(); i++) {
+            cantidades[i] = VentasFacturaActualTable.getValueAt(i, 2).toString();
+        }
+        return cantidades;
     }
 
     public String[] dataAbonos() {
@@ -849,6 +899,7 @@ public class App extends JFrame {
 
         //clear all historial fields
         HistorialTableShortFactura.setModel(new DefaultTableModel(null, new String[]{"Codigo", "Fecha", "Accion", "Balance inicial", "Total", "Balance Final"}));
+        HistorialTableFactura.setModel(new DefaultTableModel(null, new String[]{"Categoria", "Producto", "Cantidad", "Precio","Subtotal"}));
         HistorialTxtCodigo.setText("");
         HistorialTxtNombre.setText("");
         HistorialTxtGrado.setText("");
@@ -866,6 +917,7 @@ public class App extends JFrame {
         ProductosComboCategoria.setSelectedIndex(0);
         ProductosBtnEditar.setEnabled(false);
         ProductosBtnGuardar.setEnabled(false);
+        ProductosBtnBorrar.setEnabled(false);
 
         //update the tables if data is changed
         VentasAlumnosTable.setModel(mn.showAlumnos(conn));
@@ -954,6 +1006,7 @@ public class App extends JFrame {
         UsuariosComboTipo.setFont(font);
         //All usuarios buttons
         UsuariosBtnGuardar.setFont(font);
+        UsuariosBtnBorrar.setFont(font);
         UsuariosBtnActualizar.setFont(font);
         UsuariosBtnCancelar.setFont(font);
         UsuariosBtnCancelar.setFont(font);
