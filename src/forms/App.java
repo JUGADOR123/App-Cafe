@@ -772,6 +772,7 @@ public class App extends JFrame {
         PopoutProductos.getTableHeader().setFont(new Font("Montserrat", Font.PLAIN, 20));
         PopoutSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
         PopoutSpinner.getComponent(0).setPreferredSize(new Dimension(300, 100));
+        PopoutProductos.setDefaultEditor(Object.class, null);
         //set the font of the spinner to match the size of the table
         PopoutSpinner.setFont(new Font("Montserrat", Font.PLAIN, 50));
         ((JSpinner.DefaultEditor) PopoutSpinner.getEditor()).getTextField().setEditable(false);

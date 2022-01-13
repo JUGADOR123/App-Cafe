@@ -1,7 +1,10 @@
 package Code;
 
 import javax.swing.table.DefaultTableModel;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class sqlqueries {
 
@@ -109,8 +112,8 @@ public class sqlqueries {
         try {
             String sql = "UPDATE usuarios SET nomcompleto=?,user=?,contra=?,type=? WHERE codusuario=?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, textos[1]);
-            pst.setString(2, textos[2]);
+            pst.setString(1, textos[2]);
+            pst.setString(2, textos[1]);
             pst.setString(3, textos[3]);
             pst.setString(4, textos[4]);
             pst.setString(5, textos[0]);
@@ -305,13 +308,14 @@ public class sqlqueries {
     }
 
     public void createFactura(Connection con, String[] textos, String[] ids, String[] cantidades) {
-        int random = (int) (Math.random() * 10000000000L);
+        //generate random 9 digit long
+        long random = ThreadLocalRandom.current().nextLong(100000000, 999999999L);
         Date date = new Date(System.currentTimeMillis());
         try {
             String SQL = "Insert into shortfactura (IdShortFactura,codalumno,accion,date,saldoinicial,cobro,saldofinal) VALUES(?,?,?,?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(SQL);
 
-            pst.setInt(1, random);
+            pst.setLong(1, random);
             pst.setString(2, textos[0]);
             pst.setString(3, "Compra");
             pst.setDate(4, date);
@@ -336,7 +340,7 @@ public class sqlqueries {
             try {
                 String SQL = "Insert into detallefactura (IdFactura,IdProducto,cantidad) VALUES(?,?,?)";
                 PreparedStatement pst = con.prepareStatement(SQL);
-                pst.setInt(1, random);
+                pst.setLong(1, random);
                 pst.setString(2, ids[i]);
                 pst.setString(3, cantidades[i]);
                 pst.execute();
@@ -361,7 +365,8 @@ public class sqlqueries {
                 registros[1] = rs.getString("producto");
                 registros[2] = rs.getString("cantidad");
                 registros[3] = rs.getString("precio");
-                registros[4] = String.valueOf(Math.round((Double.valueOf(registros[2]) * Double.valueOf(registros[3]) * 100)) / 100);
+                BigDecimal bd= BigDecimal.valueOf((Double.parseDouble(registros[2]) * Double.parseDouble(registros[3])));
+                registros[4] = String.valueOf(bd.setScale(2, RoundingMode.HALF_UP));
                 modelo.addRow(registros);
             }
         } catch (Exception e) {
