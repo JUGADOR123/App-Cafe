@@ -696,6 +696,13 @@ public class App extends JFrame {
                 }
             }
         });
+        ProductosBtnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mn.updateProducto(con, dataProductos());
+                limpiar();
+            }
+        });
     }
 
     public void init() {

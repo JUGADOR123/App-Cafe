@@ -141,8 +141,8 @@ public class sqlqueries {
             String sql = "INSERT INTO usuarios (nomcompleto,user,contra,type) VALUES (?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(sql);
 
-            pst.setString(1, textos[1]);
-            pst.setString(2, textos[2]);
+            pst.setString(1, textos[2]);
+            pst.setString(2, textos[1]);
             pst.setString(3, textos[3]);
             pst.setString(4, textos[4]);
             pst.executeUpdate();
@@ -304,6 +304,19 @@ public class sqlqueries {
             pst.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+    public void updateProducto(Connection con, String[] textos) {
+        try{
+            String sql = "UPDATE productos SET producto=?, precio=?, categoria=? WHERE codigo=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, textos[1]);
+            pst.setString(2, textos[2]);
+            pst.setString(3, textos[3]);
+            pst.setString(4, textos[0]);
+            pst.executeUpdate();
+        }catch (Exception e){
+            System.out.println("Error: "+e.getMessage());
         }
     }
 
